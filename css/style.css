@@ -313,8 +313,11 @@ button {
     transition: transform var(--transition-fast);
 }
 
-.card:hover {
-    transform: scale(1.15);
+/* Spécificité .card.reveal nécessaire : à spécificité égale, la règle
+   .reveal.is-visible (plus bas, transform: translateY(0)) écraserait
+   sinon ce scale() une fois la card révélée au scroll. */
+.card.reveal:hover {
+    transform: scale(1.05);
 }
 
 .card img,
