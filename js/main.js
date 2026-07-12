@@ -1,8 +1,17 @@
+const SITE_VERSION = '1.1';
+
 document.addEventListener('DOMContentLoaded', () => {
     initNavToggle();
     initScrollReveal();
     initContactForm();
+    initVersion();
 });
+
+function initVersion() {
+    document.querySelectorAll('.site-version').forEach((el) => {
+        el.textContent = `v${SITE_VERSION}`;
+    });
+}
 
 function initNavToggle() {
     const toggle = document.querySelector('.nav-toggle');

@@ -1,17 +1,36 @@
 /* =========================================================
+   Fonts
+   ========================================================= */
+@font-face {
+    font-family: 'Eurostile';
+    src: url('../fonts/Eurostile-BlackItalic.woff2') format('woff2'),
+         url('../fonts/Eurostile-BlackItalic.woff') format('woff'),
+         url('../fonts/Eurostile-BlackItalic.ttf') format('truetype');
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+/* =========================================================
    Variables
    ========================================================= */
 :root {
-    --color-black: #000000;
-    --color-dark: #0d0d0d;
-    --color-dark-alt: #161616;
-    --color-red: #e10600;
-    --color-red-dark: #a30500;
+    /* Fond anthracite : couleur de fond principale, étendue à tout le site */
+    --color-anthracite: #1a1a1a;
+    --color-anthracite-alt: #242424;
+
+    /* Rouge utilisé sur fond clair (nuancé, premium) vs sur fond anthracite (celui du logo) */
+    --color-red-on-light: #b90712;
+    --color-red-on-light-hover: #8f0510;
+    --color-red: #e10f1b;
+    --color-red-hover: #ff3b45;
+
     --color-white: #ffffff;
     --color-gray: #cccccc;
     --color-gray-light: #f2f2f2;
 
-    --font-main: Arial, Helvetica, sans-serif;
+    --font-title: 'Eurostile', Arial, sans-serif;
+    --font-main: 'Roboto', Arial, Helvetica, sans-serif;
 
     --transition-fast: 0.2s ease;
     --transition-medium: 0.4s ease;
@@ -39,7 +58,7 @@ html {
 
 body {
     font-family: var(--font-main);
-    background: var(--color-black);
+    background: var(--color-anthracite);
     color: var(--color-white);
     line-height: 1.6;
 }
@@ -82,6 +101,9 @@ button {
 }
 
 .section-title {
+    font-family: var(--font-title);
+    font-style: italic;
+    font-weight: 900;
     font-size: clamp(1.6rem, 4vw, 2.4rem);
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -103,8 +125,8 @@ button {
     height: var(--header-height);
     display: flex;
     align-items: center;
-    background: var(--color-black);
-    border-bottom: 1px solid var(--color-dark-alt);
+    background: var(--color-anthracite);
+    border-bottom: 1px solid var(--color-anthracite-alt);
 }
 
 .site-header .container {
@@ -122,6 +144,10 @@ button {
 .logo-link img {
     height: 48px;
     width: auto;
+}
+
+.logo-link .logo-mobile {
+    display: none;
 }
 
 .nav-menu {
@@ -177,6 +203,9 @@ button {
 }
 
 .hero h1 {
+    font-family: var(--font-title);
+    font-style: italic;
+    font-weight: 900;
     font-size: clamp(1.6rem, 5vw, 2.6rem);
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -221,7 +250,7 @@ button {
 }
 
 .btn-primary:hover {
-    background: var(--color-red-dark);
+    background: var(--color-red-hover);
     transform: translateY(-2px);
 }
 
@@ -233,7 +262,7 @@ button {
 
 .btn-outline:hover {
     background: var(--color-white);
-    color: var(--color-black);
+    color: var(--color-anthracite);
 }
 
 /* =========================================================
@@ -246,8 +275,8 @@ button {
 }
 
 .card {
-    background: var(--color-dark-alt);
-    border: 1px solid #262626;
+    background: var(--color-anthracite-alt);
+    border: 1px solid #2e2e2e;
     border-radius: var(--radius);
     padding: 32px 24px;
     text-align: center;
@@ -260,6 +289,9 @@ button {
 }
 
 .card h3 {
+    font-family: var(--font-title);
+    font-style: italic;
+    font-weight: 900;
     text-transform: uppercase;
     margin-bottom: 12px;
     font-size: 1.1rem;
@@ -296,7 +328,7 @@ button {
 
 .form-group input,
 .form-group textarea {
-    background: var(--color-dark-alt);
+    background: var(--color-anthracite-alt);
     border: 1px solid #333;
     border-radius: var(--radius);
     padding: 12px 14px;
@@ -337,6 +369,9 @@ button {
 }
 
 .contact-info h3 {
+    font-family: var(--font-title);
+    font-style: italic;
+    font-weight: 900;
     text-transform: uppercase;
     font-size: 1rem;
     margin-bottom: 8px;
@@ -351,7 +386,7 @@ button {
    Footer
    ========================================================= */
 .site-footer {
-    border-top: 1px solid var(--color-dark-alt);
+    border-top: 1px solid var(--color-anthracite-alt);
     padding-block: 32px;
     text-align: center;
     color: var(--color-gray);
@@ -391,14 +426,26 @@ button {
    Responsive
    ========================================================= */
 @media (max-width: 768px) {
+    .logo-link .logo-desktop {
+        display: none;
+    }
+
+    .logo-link .logo-mobile {
+        display: block;
+    }
+
+    .section {
+        padding-block: 56px;
+    }
+
     .nav-menu {
         position: absolute;
         top: var(--header-height);
         left: 0;
         right: 0;
         flex-direction: column;
-        background: var(--color-black);
-        border-bottom: 1px solid var(--color-dark-alt);
+        background: var(--color-anthracite);
+        border-bottom: 1px solid var(--color-anthracite-alt);
         padding: 24px;
         gap: 20px;
         transform: translateY(-150%);
