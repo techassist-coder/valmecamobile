@@ -310,7 +310,7 @@ button {
     border-radius: var(--radius);
     padding: 32px 24px;
     text-align: center;
-    transition: transform var(--transition-fast);
+    transition: transform 0.12s ease;
 }
 
 /* Spécificité .card.reveal nécessaire : à spécificité égale, la règle
