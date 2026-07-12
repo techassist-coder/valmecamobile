@@ -1,10 +1,11 @@
-const SITE_VERSION = '1.2';
+const SITE_VERSION = '1.3';
 
 document.addEventListener('DOMContentLoaded', () => {
     initNavToggle();
     initScrollReveal();
     initContactForm();
     initVersion();
+    initIntro();
 });
 
 function initVersion() {
@@ -47,6 +48,64 @@ function initScrollReveal() {
     }, { threshold: 0.15 });
 
     elements.forEach((el) => observer.observe(el));
+}
+
+function initIntro() {
+    const intro = document.getElementById('intro');
+    if (!intro) return;
+
+    const boutonPasser = intro.querySelector('.intro-passer');
+    const logoCible = document.querySelector('.site-header .logo-desktop');
+
+    const MODE_REGLAGE = true; // ⚠️ repasser à false avant la mise en ligne !
+    const dejaVue = !MODE_REGLAGE && sessionStorage.getItem('introVue') === '1';
+    const petitEcran = window.matchMedia('(max-width: 768px)').matches;
+    const mouvementReduit = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (dejaVue || petitEcran || mouvementReduit) {
+        intro.remove();
+        return;
+    }
+
+    function viserLeLogo() {
+        if (!logoCible) return;
+        const rect = logoCible.getBoundingClientRect();
+        intro.style.transformOrigin = `${rect.left + rect.width / 2}px ${rect.top + rect.height / 2}px`;
+    }
+
+    function terminerIntro() {
+        sessionStorage.setItem('introVue', '1');
+        intro.remove();
+    }
+
+    boutonPasser.addEventListener('click', terminerIntro);
+
+    intro.addEventListener('animationend', (e) => {
+        switch (e.animationName) {
+            case 'camion-entre':
+                intro.classList.add('phase-texte');
+                break;
+
+            case 'texte-apparait':
+                setTimeout(() => {
+                    viserLeLogo();
+                    intro.classList.add('phase-sortie');
+                }, 1200);
+                break;
+
+            case 'intro-sortie':
+                terminerIntro();
+                break;
+        }
+    });
+
+    if (document.readyState === 'complete') {
+        intro.classList.add('phase-camion');
+    } else {
+        window.addEventListener('load', () => {
+            intro.classList.add('phase-camion');
+        });
+    }
 }
 
 function initContactForm() {

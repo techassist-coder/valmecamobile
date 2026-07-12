@@ -416,6 +416,138 @@ button {
 }
 
 /* =========================================================
+   Intro (overlay d'accueil)
+   ========================================================= */
+#intro {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--color-anthracite);
+    transform-origin: 6% 20%; /* repris par le JS avec la position réelle du logo du header */
+}
+
+.intro-scene {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    padding: 24px;
+}
+
+.intro-camion {
+    width: min(42vw, 480px);
+    height: auto;
+    transform: translateX(-120vw);
+}
+
+#intro.phase-camion .intro-camion {
+    animation: camion-entre 1.15s cubic-bezier(0.22, 1.2, 0.36, 1) forwards;
+}
+
+@keyframes camion-entre {
+    from { transform: translateX(-120vw); }
+    to   { transform: translateX(0); }
+}
+
+.intro-texte-bloc {
+    position: relative;
+}
+
+.intro-rideau {
+    position: absolute;
+    inset: 0;
+    background: var(--color-red);
+    transform: scaleX(0);
+}
+
+.intro-texte {
+    opacity: 0;
+    border-left: 6px solid var(--color-red);
+    padding-left: 24px;
+}
+
+.intro-nom {
+    font-family: var(--font-title);
+    font-style: italic;
+    font-weight: 900;
+    font-size: clamp(2.6rem, 6vw, 4.5rem);
+    line-height: 1.05;
+    color: var(--color-white);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.intro-nom span {
+    color: var(--color-red);
+}
+
+.intro-sous-titre {
+    margin-top: 10px;
+    font-size: clamp(0.75rem, 1.5vw, 1rem);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--color-gray);
+}
+
+#intro.phase-texte .intro-rideau {
+    animation: rideau-balaye 1.3s ease-in-out forwards;
+}
+
+#intro.phase-texte .intro-texte {
+    animation: texte-apparait 1.3s linear forwards;
+}
+
+@keyframes rideau-balaye {
+    0%    { transform: scaleX(0); transform-origin: left; }
+    50%   { transform: scaleX(1); transform-origin: left; }
+    50.1% { transform: scaleX(1); transform-origin: right; }
+    100%  { transform: scaleX(0); transform-origin: right; }
+}
+
+@keyframes texte-apparait {
+    0%, 49%   { opacity: 0; }
+    51%, 100% { opacity: 1; }
+}
+
+#intro.phase-sortie {
+    animation: intro-sortie 1s ease-in forwards;
+}
+
+@keyframes intro-sortie {
+    from { transform: scale(1); opacity: 1; }
+    to   { transform: scale(0.25); opacity: 0; }
+}
+
+.intro-passer {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    background: transparent;
+    border: 1px solid var(--color-gray);
+    color: var(--color-gray);
+    font-family: var(--font-main);
+    font-size: 0.85rem;
+    padding: 8px 18px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.intro-passer:hover {
+    border-color: var(--color-white);
+    color: var(--color-white);
+}
+
+@media (max-width: 768px), (prefers-reduced-motion: reduce) {
+    #intro {
+        display: none;
+    }
+}
+
+/* =========================================================
    Animations
    ========================================================= */
 @keyframes fade-in-up {
