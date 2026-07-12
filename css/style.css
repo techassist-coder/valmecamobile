@@ -310,14 +310,6 @@ button {
     border-radius: var(--radius);
     padding: 32px 24px;
     text-align: center;
-    transition: transform 0.12s ease;
-}
-
-/* Spécificité .card.reveal nécessaire : à spécificité égale, la règle
-   .reveal.is-visible (plus bas, transform: translateY(0)) écraserait
-   sinon ce scale() une fois la card révélée au scroll. */
-.card.reveal:hover {
-    transform: scale(1.05);
 }
 
 .card img,
