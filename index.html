@@ -3,10 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Val'Meca Mobile</title>
+    <title>Val'Meca Mobile - Mécanique automobile à domicile</title>
+    <link rel="icon" href="images/logos/logo_mini.png">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <h1>VAL'MECA MOBILE</h1>
-    <p>Site en cours de construction</p>
+    <header class="site-header">
+        <div class="container">
+            <a href="index.html" class="logo-link">
+                <img src="images/logos/logo_mini.png" alt="Val'Meca Mobile">
+            </a>
+
+            <nav>
+                <button class="nav-toggle" aria-label="Ouvrir le menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="is-active">Accueil</a></li>
+                    <li><a href="index.html#services">Services</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <img src="images/logos/logo_avec_fond.png" alt="Val'Meca Mobile" class="hero-logo reveal">
+            <h1 class="reveal reveal-delay-1">Site en <span>construction</span></h1>
+            <div class="bar reveal reveal-delay-1"></div>
+            <p class="reveal reveal-delay-2">Notre nouveau site arrive bientôt. Mécanique automobile à domicile, on s'occupe de tout !</p>
+        </section>
+
+        <section id="services" class="section">
+            <div class="container">
+                <h2 class="section-title reveal">Nos <span>services</span></h2>
+
+                <div class="card-grid">
+                    <div class="card reveal">
+                        <h3>Entretien</h3>
+                        <p>Vidange, freins, filtres... l'entretien courant réalisé directement chez vous.</p>
+                    </div>
+
+                    <div class="card reveal reveal-delay-1">
+                        <h3>Diagnostic</h3>
+                        <p>Détection de pannes et diagnostic électronique sur place.</p>
+                    </div>
+
+                    <div class="card reveal reveal-delay-2">
+                        <h3>Dépannage</h3>
+                        <p>Une intervention rapide, où que vous soyez.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Val'Meca Mobile - Mécanique automobile à domicile</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
 </body>
 </html>
