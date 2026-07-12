@@ -50,6 +50,7 @@
     --color-white: #ffffff;
     --color-gray: #cccccc;
     --color-gray-light: #f2f2f2;
+    --color-gray-dark: #555555;
 
     --font-title: 'Eurostile', Arial, sans-serif;
     --font-main: 'Roboto', Arial, Helvetica, sans-serif;
@@ -309,12 +310,11 @@ button {
     border-radius: var(--radius);
     padding: 32px 24px;
     text-align: center;
-    transition: border-color var(--transition-fast), transform var(--transition-fast);
+    transition: transform var(--transition-fast);
 }
 
 .card:hover {
-    border-color: var(--color-red);
-    transform: translateY(-4px);
+    transform: scale(1.03);
 }
 
 .card img,
@@ -335,6 +335,32 @@ button {
 .card p {
     color: var(--color-gray);
     font-size: 0.95rem;
+}
+
+/* Section services : fond blanc pour trancher avec le reste du site sombre */
+#services {
+    background: var(--color-white);
+}
+
+#services .section-title {
+    color: var(--color-anthracite);
+}
+
+#services .section-title span {
+    color: var(--color-red-on-light);
+}
+
+#services .card {
+    background: var(--color-gray-light);
+    border-color: #e0e0e0;
+}
+
+#services .card h3 {
+    color: var(--color-anthracite);
+}
+
+#services .card p {
+    color: var(--color-gray-dark);
 }
 
 /* =========================================================
