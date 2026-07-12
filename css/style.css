@@ -309,6 +309,12 @@ button {
     border-radius: var(--radius);
     padding: 32px 24px;
     text-align: center;
+    transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.card:hover {
+    border-color: var(--color-red);
+    transform: translateY(-4px);
 }
 
 .card img,
