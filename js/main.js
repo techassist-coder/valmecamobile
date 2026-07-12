@@ -1,4 +1,4 @@
-const SITE_VERSION = '1.3';
+const SITE_VERSION = '1.4';
 
 document.addEventListener('DOMContentLoaded', () => {
     initNavToggle();
@@ -55,7 +55,7 @@ function initIntro() {
     if (!intro) return;
 
     const boutonPasser = intro.querySelector('.intro-passer');
-    const logoCible = document.querySelector('.site-header .logo-desktop');
+    const logoCible = document.querySelector('.hero .hero-logo');
 
     const MODE_REGLAGE = true; // ⚠️ repasser à false avant la mise en ligne !
     const dejaVue = !MODE_REGLAGE && sessionStorage.getItem('introVue') === '1';
@@ -67,7 +67,7 @@ function initIntro() {
         return;
     }
 
-    function viserLeLogo() {
+    function viserImageHero() {
         if (!logoCible) return;
         const rect = logoCible.getBoundingClientRect();
         intro.style.transformOrigin = `${rect.left + rect.width / 2}px ${rect.top + rect.height / 2}px`;
@@ -88,7 +88,7 @@ function initIntro() {
 
             case 'texte-apparait':
                 setTimeout(() => {
-                    viserLeLogo();
+                    viserImageHero();
                     intro.classList.add('phase-sortie');
                 }, 1200);
                 break;

@@ -61,6 +61,12 @@
     --header-height: 80px;
     --radius: 6px;
     --max-width: 1200px;
+
+    /* Durées centralisées : pour régler le rythme de l'intro,
+       tu ne touches qu'ici. */
+    --duree-camion: 1.15s;
+    --duree-texte: 1.3s;
+    --duree-sortie: 1s;
 }
 
 /* =========================================================
@@ -243,6 +249,7 @@ button {
     color: var(--color-gray);
     max-width: 500px;
     margin-inline: auto;
+    margin-bottom: 32px;
 }
 
 .bar {
@@ -415,9 +422,11 @@ button {
     font-size: 0.9rem;
 }
 
-/* =========================================================
-   Intro (overlay d'accueil)
-   ========================================================= */
+/* ============================================================
+   1. L'OVERLAY
+   position: fixed + inset: 0 → couvre tout l'écran, quoi qu'il
+   y ait dessous. z-index élevé pour passer devant le site.
+   ============================================================ */
 #intro {
     position: fixed;
     inset: 0;
@@ -425,9 +434,9 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    overflow: hidden; /* le camion arrive de hors-écran : on cache le débord */
     background: var(--color-anthracite);
-    transform-origin: 6% 20%; /* repris par le JS avec la position réelle du logo du header */
+    transform-origin: 50% 45%; /* repris par le JS avec la position réelle de l'image du hero */
 }
 
 .intro-scene {
@@ -437,14 +446,22 @@ button {
     padding: 24px;
 }
 
+/* ============================================================
+   PHASE 1 — Le camion entre de la gauche et pile d'un coup
+   ------------------------------------------------------------
+   État initial : hors écran à gauche (translateX(-120vw)).
+   La classe .phase-camion (posée par le JS) déclenche l'animation.
+   Le "coup de frein" vient du cubic-bezier : le 2e chiffre > 1
+   fait DÉPASSER la cible de quelques pixels avant de revenir.
+   ============================================================ */
 .intro-camion {
     width: min(42vw, 480px);
     height: auto;
-    transform: translateX(-120vw);
+    transform: translateX(-120vw); /* état de départ : invisible à gauche */
 }
 
 #intro.phase-camion .intro-camion {
-    animation: camion-entre 1.15s cubic-bezier(0.22, 1.2, 0.36, 1) forwards;
+    animation: camion-entre var(--duree-camion) cubic-bezier(0.22, 1.2, 0.36, 1) forwards;
 }
 
 @keyframes camion-entre {
@@ -452,20 +469,30 @@ button {
     to   { transform: translateX(0); }
 }
 
+/* ============================================================
+   PHASE 2 — Balayage rouge + apparition du texte
+   ------------------------------------------------------------
+   Technique du "rideau" : un panneau rouge couvre le bloc texte,
+   grandit depuis la gauche (scaleX 0 → 1), puis se rétracte vers
+   la droite (scaleX 1 → 0). Le texte devient visible à mi-course,
+   pendant qu'il est caché derrière le rideau. À l'œil : une barre
+   rouge balaye le bloc et le texte apparaît dans son sillage.
+   scaleX plutôt que width → règle transform/opacity respectée.
+   ============================================================ */
 .intro-texte-bloc {
-    position: relative;
+    position: relative; /* référence de positionnement pour le rideau */
 }
 
 .intro-rideau {
     position: absolute;
     inset: 0;
     background: var(--color-red);
-    transform: scaleX(0);
+    transform: scaleX(0); /* invisible au départ (aplati) */
 }
 
 .intro-texte {
-    opacity: 0;
-    border-left: 6px solid var(--color-red);
+    opacity: 0; /* caché tant que le rideau n'est pas passé */
+    border-left: 6px solid var(--color-red); /* la barre verticale du logo */
     padding-left: 24px;
 }
 
@@ -493,27 +520,35 @@ button {
 }
 
 #intro.phase-texte .intro-rideau {
-    animation: rideau-balaye 1.3s ease-in-out forwards;
+    animation: rideau-balaye var(--duree-texte) ease-in-out forwards;
 }
 
 #intro.phase-texte .intro-texte {
-    animation: texte-apparait 1.3s linear forwards;
+    animation: texte-apparait var(--duree-texte) linear forwards;
 }
 
 @keyframes rideau-balaye {
     0%    { transform: scaleX(0); transform-origin: left; }
-    50%   { transform: scaleX(1); transform-origin: left; }
-    50.1% { transform: scaleX(1); transform-origin: right; }
-    100%  { transform: scaleX(0); transform-origin: right; }
+    50%   { transform: scaleX(1); transform-origin: left; }   /* le rideau couvre tout */
+    50.1% { transform: scaleX(1); transform-origin: right; }  /* on change de côté d'ancrage */
+    100%  { transform: scaleX(0); transform-origin: right; }  /* il se rétracte vers la droite */
 }
 
 @keyframes texte-apparait {
-    0%, 49%   { opacity: 0; }
-    51%, 100% { opacity: 1; }
+    0%, 49%   { opacity: 0; } /* caché tant que le rideau le recouvre */
+    51%, 100% { opacity: 1; } /* révélé dans le sillage du rideau */
 }
 
+/* ============================================================
+   PHASE 3 — L'intro se réduit vers l'image du hero et disparaît
+   ------------------------------------------------------------
+   L'overlay entier rétrécit vers l'image mise en avant dans le
+   hero (là où vit le logo complet du site) en fondant. Le site,
+   déjà chargé dessous, se retrouve naturellement à découvert.
+   Le JS supprime ensuite l'overlay du DOM (animationend).
+   ============================================================ */
 #intro.phase-sortie {
-    animation: intro-sortie 1s ease-in forwards;
+    animation: intro-sortie var(--duree-sortie) ease-in forwards;
 }
 
 @keyframes intro-sortie {
@@ -521,6 +556,9 @@ button {
     to   { transform: scale(0.25); opacity: 0; }
 }
 
+/* ============================================================
+   Bouton "Passer" — discret mais toujours accessible
+   ============================================================ */
 .intro-passer {
     position: absolute;
     bottom: 24px;
@@ -541,6 +579,12 @@ button {
     color: var(--color-white);
 }
 
+/* ============================================================
+   GARDE-FOUS (double sécurité avec le JS)
+   - Petit écran : pas d'intro
+   - prefers-reduced-motion : réglage système d'accessibilité,
+     certaines personnes sont sensibles au mouvement → on respecte
+   ============================================================ */
 @media (max-width: 768px), (prefers-reduced-motion: reduce) {
     #intro {
         display: none;
