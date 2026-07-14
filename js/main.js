@@ -1,4 +1,4 @@
-const SITE_VERSION = '1.8.2';
+const SITE_VERSION = '1.9.1';
 
 document.addEventListener('DOMContentLoaded', () => {
     initNavToggle();

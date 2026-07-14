@@ -37,8 +37,8 @@
    Variables
    ========================================================= */
 :root {
-    /* Fond anthracite : couleur de fond principale, étendue à tout le site */
-    --color-anthracite: #1a1a1a;
+    /* Fond noir : couleur de fond principale, étendue à tout le site */
+    --color-anthracite: #000000;
     --color-anthracite-alt: #242424;
 
     /* Rouge utilisé sur fond clair (nuancé, premium) vs sur fond anthracite (celui du logo) */
@@ -258,6 +258,58 @@ button {
     height: 3px;
     background: var(--color-red);
     margin: 20px auto;
+}
+
+.hero-devis {
+    max-width: 640px;
+    margin: 8px auto 32px;
+    text-align: left;
+}
+
+.hero-devis h2 {
+    font-family: var(--font-title);
+    font-style: italic;
+    font-weight: 900;
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--color-red);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.hero-devis p {
+    font-size: 1rem;
+    color: var(--color-gray);
+    margin-bottom: 16px;
+}
+
+.hero-devis-list {
+    display: grid;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.hero-devis-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: var(--color-white);
+}
+
+.hero-devis-list li::before {
+    content: "\2713";
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--color-red);
+    color: var(--color-white);
+    font-size: 0.8rem;
+    font-weight: 700;
 }
 
 /* =========================================================
