@@ -53,12 +53,12 @@
 
                 <form class="contact-form reveal reveal-delay-1">
                     <div class="form-group">
-                        <label for="name">Nom</label>
+                        <label for="name">Nom <span class="required-mark">*</span></label>
                         <input type="text" id="name" name="name" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="email">Email</label>
+                        <label for="email">Email <span class="required-mark">*</span></label>
                         <input type="email" id="email" name="email" required>
                     </div>
 
@@ -78,14 +78,16 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="licensePlate">Immatriculation du véhicule</label>
+                        <label for="licensePlate">Immatriculation du véhicule <span class="required-mark">*</span></label>
                         <input type="text" id="licensePlate" name="licensePlate" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="message">Message</label>
+                        <label for="message">Message <span class="required-mark">*</span></label>
                         <textarea id="message" name="message" required></textarea>
                     </div>
+
+                    <p class="required-note">* Champ obligatoire</p>
 
                     <button type="submit" class="btn btn-primary">Envoyer</button>
 
