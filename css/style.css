@@ -3,7 +3,8 @@
    ========================================================= */
 @font-face {
     font-family: 'Eurostile';
-    src: url('../assets/fonts/Eurostile-Black.ttf') format('truetype');
+    src: url('../assets/fonts/Eurostile-Black.woff2') format('woff2'),
+         url('../assets/fonts/Eurostile-Black.ttf') format('truetype');
     font-weight: 900;
     font-style: normal;
     font-display: swap;
@@ -11,7 +12,8 @@
 
 @font-face {
     font-family: 'Eurostile';
-    src: url('../assets/fonts/Eurostile-BlackItalic.ttf') format('truetype');
+    src: url('../assets/fonts/Eurostile-BlackItalic.woff2') format('woff2'),
+         url('../assets/fonts/Eurostile-BlackItalic.ttf') format('truetype');
     font-weight: 900;
     font-style: italic;
     font-display: swap;
@@ -19,7 +21,8 @@
 
 @font-face {
     font-family: 'Roboto';
-    src: url('../assets/fonts/Roboto-Variable.ttf') format('truetype-variations');
+    src: url('../assets/fonts/Roboto-Variable.woff2') format('woff2-variations'),
+         url('../assets/fonts/Roboto-Variable.ttf') format('truetype-variations');
     font-weight: 100 900;
     font-style: normal;
     font-display: swap;
@@ -27,7 +30,8 @@
 
 @font-face {
     font-family: 'Roboto';
-    src: url('../assets/fonts/Roboto-Italic-Variable.ttf') format('truetype-variations');
+    src: url('../assets/fonts/Roboto-Italic-Variable.woff2') format('woff2-variations'),
+         url('../assets/fonts/Roboto-Italic-Variable.ttf') format('truetype-variations');
     font-weight: 100 900;
     font-style: italic;
     font-display: swap;
@@ -486,6 +490,7 @@ button {
     text-align: center;
 }
 
+.contact-info h2,
 .contact-info h3 {
     font-family: var(--font-title);
     font-style: italic;
@@ -683,17 +688,6 @@ button {
 /* =========================================================
    Animations
    ========================================================= */
-@keyframes fade-in-up {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 .reveal {
     opacity: 0;
     transform: translateY(24px);
@@ -708,6 +702,165 @@ button {
 .reveal-delay-1 { transition-delay: 0.1s; }
 .reveal-delay-2 { transition-delay: 0.2s; }
 .reveal-delay-3 { transition-delay: 0.3s; }
+
+/* =========================================================
+   Liens de contact (telephone / email cliquables)
+   ========================================================= */
+.lien-contact {
+    color: var(--color-gray);
+    border-bottom: 1px solid transparent;
+    transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.lien-contact:hover,
+.lien-contact:focus-visible {
+    color: var(--color-white);
+    border-bottom-color: var(--color-red);
+}
+
+/* =========================================================
+   Formulaire : consentement RGPD et champ anti-spam
+   ========================================================= */
+.form-consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.form-consent input[type="checkbox"] {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin-top: 3px;
+    accent-color: var(--color-red);
+    cursor: pointer;
+}
+
+.form-consent label {
+    font-size: 0.9rem;
+    color: var(--color-gray);
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+.form-consent a {
+    color: var(--color-red);
+    text-decoration: underline;
+}
+
+.form-consent a:hover {
+    color: var(--color-red-hover);
+}
+
+/* Pot de miel : invisible pour les humains, rempli par les robots.
+   On evite display:none, que certains robots detectent. */
+.champ-leurre {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* Bouton d'envoi pendant la soumission */
+.contact-form button[type="submit"]:disabled {
+    opacity: 0.6;
+    cursor: wait;
+    transform: none;
+}
+
+/* =========================================================
+   Pied de page : navigation secondaire
+   ========================================================= */
+.footer-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px 24px;
+    margin-bottom: 20px;
+}
+
+.footer-nav a {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color var(--transition-fast);
+}
+
+.footer-nav a:hover,
+.footer-nav a:focus-visible {
+    color: var(--color-red);
+}
+
+/* =========================================================
+   Pages legales (mentions legales, confidentialite, 404)
+   ========================================================= */
+.legal {
+    max-width: 800px;
+}
+
+.legal h2 {
+    font-family: var(--font-title);
+    font-style: italic;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 1.15rem;
+    letter-spacing: 0.5px;
+    color: var(--color-red);
+    margin-top: 40px;
+    margin-bottom: 12px;
+}
+
+.legal h3 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 24px;
+    margin-bottom: 8px;
+}
+
+.legal p,
+.legal li {
+    color: var(--color-gray);
+    margin-bottom: 12px;
+}
+
+.legal ul {
+    list-style: disc;
+    padding-left: 22px;
+    margin-bottom: 16px;
+}
+
+.legal a {
+    color: var(--color-red);
+    text-decoration: underline;
+}
+
+.legal a:hover {
+    color: var(--color-red-hover);
+}
+
+.legal .a-completer {
+    background: rgba(225, 15, 27, 0.12);
+    border-left: 3px solid var(--color-red);
+    padding: 2px 8px;
+    color: var(--color-white);
+    font-weight: 600;
+}
+
+.legal-maj {
+    font-size: 0.85rem;
+    font-style: italic;
+    margin-top: 48px;
+}
+
+/* =========================================================
+   Focus visible : accessibilite clavier sur tout le site
+   ========================================================= */
+:focus-visible {
+    outline: 2px solid var(--color-red);
+    outline-offset: 3px;
+}
 
 /* =========================================================
    Responsive
@@ -737,12 +890,17 @@ button {
         gap: 20px;
         transform: translateY(-150%);
         opacity: 0;
-        transition: transform var(--transition-medium), opacity var(--transition-medium);
+        /* visibility: hidden retire les liens du parcours clavier quand le
+           menu est ferme (sans lui, on tabule dans un menu invisible). */
+        visibility: hidden;
+        transition: transform var(--transition-medium), opacity var(--transition-medium),
+                    visibility var(--transition-medium);
     }
 
     .nav-menu.is-open {
         transform: translateY(0);
         opacity: 1;
+        visibility: visible;
     }
 
     .nav-toggle {

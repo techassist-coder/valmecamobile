@@ -1,0 +1,83 @@
+# =====================================================================
+# Déploiement automatique vers l'hébergement OVH par FTP
+# =====================================================================
+# Pourquoi ce fichier : l'option « Lier un dépôt Git » d'OVH n'est pas
+# disponible sur l'offre d'hébergement gratuite. Ce workflow fait la même
+# chose gratuitement : à chaque push sur la branche main, GitHub envoie
+# les fichiers modifiés vers le serveur OVH.
+#
+# ---------------------------------------------------------------------
+# AVANT LA PREMIÈRE UTILISATION, créer 3 secrets sur GitHub :
+#   Dépôt > Settings > Secrets and variables > Actions > New repository secret
+#
+#   FTP_SERVER    ex. ftp.cluster0XX.hosting.ovh.net
+#                 (valeur exacte dans l'espace client OVH > FTP-SSH)
+#   FTP_USERNAME  ex. valmecamXXX
+#   FTP_PASSWORD  le mot de passe FTP
+#
+# Ces valeurs sont chiffrées par GitHub. Ne JAMAIS les écrire dans un
+# fichier du dépôt.
+# =====================================================================
+
+name: Déploiement OVH
+
+on:
+  # Déploie automatiquement à chaque envoi sur main
+  push:
+    branches: [main]
+  # Permet aussi de lancer un déploiement à la main depuis l'onglet Actions
+  workflow_dispatch:
+
+# Empêche deux déploiements simultanés d'écrire en même temps sur le serveur
+concurrency:
+  group: deploiement-ovh
+  cancel-in-progress: false
+
+jobs:
+  deployer:
+    name: Envoyer les fichiers vers OVH
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Vérifier que le mode réglage de l'intro est bien désactivé
+        # Garde-fou : refuse de mettre en ligne si MODE_REGLAGE est resté à
+        # true, ce qui ferait rejouer l'animation à chaque page.
+        run: |
+          if grep -q "MODE_REGLAGE = true" js/main.js; then
+            echo "::error file=js/main.js::MODE_REGLAGE est à true : l'intro se rejouerait à chaque chargement. Déploiement annulé."
+            exit 1
+          fi
+          echo "MODE_REGLAGE est bien à false."
+
+      - name: Vérifier la syntaxe du PHP
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq php-cli
+          php -l contact.php
+
+      - name: Vérifier la syntaxe du JavaScript
+        run: node --check js/main.js
+
+      - name: Transférer par FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          # FTPS = FTP chiffré. Si OVH refuse la connexion, remplacer par
+          # « ftp » (moins sûr : le mot de passe circule en clair).
+          protocol: ftps
+          # Racine du site sur l'hébergement OVH
+          server-dir: ./www/
+          local-dir: ./
+          # Ne pas envoyer ce qui n'a rien à faire sur le serveur
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            **/node_modules/**
+            **/*.md
+            **/.DS_Store
+            **/Thumbs.db
