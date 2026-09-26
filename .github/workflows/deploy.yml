@@ -10,9 +10,13 @@
 # AVANT LA PREMIÈRE UTILISATION, créer 3 secrets sur GitHub :
 #   Dépôt > Settings > Secrets and variables > Actions > New repository secret
 #
-#   FTP_SERVER    ex. ftp.cluster0XX.hosting.ovh.net
-#                 (valeur exacte dans l'espace client OVH > FTP-SSH)
-#   FTP_USERNAME  ex. valmecamXXX
+#   FTP_SERVER    le nom d'hôte SEUL, recopié depuis l'espace client OVH
+#                 (Hébergement > onglet FTP-SSH > colonne "Serveur FTP").
+#                 Il ressemble à ftp.clusterNNN.hosting.ovh.net, où NNN est
+#                 le numéro de VOTRE cluster : ne recopiez jamais un exemple
+#                 générique, il ne se résoudrait pas en DNS.
+#                 Sans "ftp://", sans port, sans barre oblique finale.
+#   FTP_USERNAME  l'identifiant FTP affiché sur la même page
 #   FTP_PASSWORD  le mot de passe FTP
 #
 # Ces valeurs sont chiffrées par GitHub. Ne JAMAIS les écrire dans un
@@ -75,6 +79,46 @@ jobs:
 
       - name: Vérifier la syntaxe du JavaScript
         run: node --check js/main.js
+
+      - name: Vérifier le paramétrage du serveur FTP
+        # Le transfert échouait sur "getaddrinfo ENOTFOUND ***", un message
+        # illisible car GitHub masque la valeur du secret. Ces contrôles
+        # produisent à la place un diagnostic précis, sans jamais afficher
+        # le secret lui-même.
+        # La valeur passe par une variable d'environnement plutôt que par
+        # une interpolation directe dans le script : cela évite qu'un
+        # contenu inattendu soit interprété par le shell.
+        env:
+          HOTE_FTP: ${{ secrets.FTP_SERVER }}
+        run: |
+          if [ -z "$HOTE_FTP" ]; then
+            echo "::error::Le secret FTP_SERVER est vide ou n'existe pas. À créer dans Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+
+          if printf '%s' "$HOTE_FTP" | grep -qiE '^[a-z]+://'; then
+            echo "::error::FTP_SERVER contient un préfixe de protocole (ftp:// ou sftp://). Ne mettre que le nom d'hôte."
+            exit 1
+          fi
+
+          if printf '%s' "$HOTE_FTP" | grep -q '[/:]'; then
+            echo "::error::FTP_SERVER contient une barre oblique ou un numéro de port. Ne mettre que le nom d'hôte."
+            exit 1
+          fi
+
+          if printf '%s' "$HOTE_FTP" | grep -qE 'cluster0?XX|NNN|exemple|example'; then
+            echo "::error::FTP_SERVER contient encore un exemple générique (XX, NNN...). Recopier la valeur réelle depuis OVH > Hébergement > FTP-SSH."
+            exit 1
+          fi
+
+          # getent ahosts interroge les deux familles d'adresses, IPv4 et
+          # IPv6. La commande est toujours présente sur un runner Ubuntu.
+          if ! getent ahosts "$HOTE_FTP" > /dev/null 2>&1; then
+            echo "::error::Le nom d'hôte de FTP_SERVER ne se résout pas en DNS. C'est la cause de l'erreur getaddrinfo ENOTFOUND. Vérifier la valeur dans OVH > Hébergement > onglet FTP-SSH."
+            exit 1
+          fi
+
+          echo "Nom d'hôte FTP valide et résolu en DNS."
 
       - name: Transférer par FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
