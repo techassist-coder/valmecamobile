@@ -80,7 +80,8 @@ jobs:
       - name: Vérifier la syntaxe du JavaScript
         run: node --check js/main.js
 
-      - name: Vérifier le paramétrage du serveur FTP
+      - name: Vérifier et normaliser le serveur FTP
+        id: ftp
         # Le transfert échouait sur "getaddrinfo ENOTFOUND ***", un message
         # illisible car GitHub masque la valeur du secret. Ces contrôles
         # produisent à la place un diagnostic précis, sans jamais afficher
@@ -96,34 +97,50 @@ jobs:
             exit 1
           fi
 
-          if printf '%s' "$HOTE_FTP" | grep -qiE '^[a-z]+://'; then
-            echo "::error::FTP_SERVER contient un préfixe de protocole (ftp:// ou sftp://). Ne mettre que le nom d'hôte."
+          hote="$HOTE_FTP"
+
+          # Nettoyage des erreurs de saisie courantes, plutôt que d'échouer :
+          # préfixe de protocole, chemin collé, numéro de port, espaces.
+          hote=$(printf '%s' "$hote" | tr -d '[:space:]')
+          hote=$(printf '%s' "$hote" | sed -E 's#^[A-Za-z]+://##')
+          hote="${hote%%/*}"
+          hote="${hote%%:*}"
+
+          # La valeur nettoyée est une chaîne différente du secret : GitHub
+          # ne la masquerait donc plus automatiquement. On le lui demande
+          # explicitement, sans quoi le nom d'hôte apparaîtrait en clair
+          # dans les journaux d'un dépôt public.
+          echo "::add-mask::$hote"
+
+          if [ "$hote" != "$HOTE_FTP" ]; then
+            echo "::warning::FTP_SERVER contenait un préfixe de protocole, un port ou un chemin. La valeur a été nettoyée automatiquement pour ce déploiement, mais il reste préférable de corriger le secret : seul le nom d'hôte doit y figurer."
+          fi
+
+          if [ -z "$hote" ]; then
+            echo "::error::Après nettoyage, FTP_SERVER ne contient aucun nom d'hôte exploitable."
             exit 1
           fi
 
-          if printf '%s' "$HOTE_FTP" | grep -q '[/:]'; then
-            echo "::error::FTP_SERVER contient une barre oblique ou un numéro de port. Ne mettre que le nom d'hôte."
-            exit 1
-          fi
-
-          if printf '%s' "$HOTE_FTP" | grep -qE 'cluster0?XX|NNN|exemple|example'; then
+          if printf '%s' "$hote" | grep -qE 'cluster0?XX|NNN|exemple|example'; then
             echo "::error::FTP_SERVER contient encore un exemple générique (XX, NNN...). Recopier la valeur réelle depuis OVH > Hébergement > FTP-SSH."
             exit 1
           fi
 
           # getent ahosts interroge les deux familles d'adresses, IPv4 et
           # IPv6. La commande est toujours présente sur un runner Ubuntu.
-          if ! getent ahosts "$HOTE_FTP" > /dev/null 2>&1; then
-            echo "::error::Le nom d'hôte de FTP_SERVER ne se résout pas en DNS. C'est la cause de l'erreur getaddrinfo ENOTFOUND. Vérifier la valeur dans OVH > Hébergement > onglet FTP-SSH."
+          if ! getent ahosts "$hote" > /dev/null 2>&1; then
+            echo "::error::Le nom d'hôte de FTP_SERVER ne se résout pas en DNS, même après nettoyage. C'est la cause de l'erreur getaddrinfo ENOTFOUND. Vérifier la valeur dans OVH > Hébergement > onglet FTP-SSH."
             exit 1
           fi
 
+          echo "hote=$hote" >> "$GITHUB_OUTPUT"
           echo "Nom d'hôte FTP valide et résolu en DNS."
 
       - name: Transférer par FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_SERVER }}
+          # Nom d'hôte nettoyé par l'étape précédente, et non le secret brut
+          server: ${{ steps.ftp.outputs.hote }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           # FTPS = FTP chiffré. Si OVH refuse la connexion, remplacer par
