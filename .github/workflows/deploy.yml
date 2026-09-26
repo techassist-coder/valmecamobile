@@ -197,8 +197,8 @@ jobs:
           }
 
           lister "/"
+          lister "/valmecamobile/"
           lister "/www/"
-          lister "/home/"
 
       - name: Transférer par FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -222,8 +222,17 @@ jobs:
           # Passer à une offre OVH avec SSH permettrait de basculer en
           # sftp et de supprimer cette exposition.
           protocol: ftp
-          # Racine du site sur l'hébergement OVH
-          server-dir: ./www/
+          # Racine servie par le domaine valmecamobile.fr.
+          #
+          # Ce n'est PAS ./www/ : l'inspection de l'arborescence a montré
+          # que le compte FTP contient deux dossiers, "www" et
+          # "valmecamobile". Le transfert vers ./www/ fonctionnait
+          # parfaitement — tous les fichiers y sont — mais le domaine ne
+          # sert pas ce dossier, d'où un site qui restait vide malgré un
+          # déploiement réussi.
+          # La valeur doit correspondre à la racine déclarée dans
+          # l'espace client OVH, onglet Multisite.
+          server-dir: ./valmecamobile/
           local-dir: ./
           # Ne pas envoyer ce qui n'a rien à faire sur le serveur
           exclude: |
