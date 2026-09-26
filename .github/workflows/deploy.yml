@@ -45,11 +45,27 @@ jobs:
       - name: Vérifier que le mode réglage de l'intro est bien désactivé
         # Garde-fou : refuse de mettre en ligne si MODE_REGLAGE est resté à
         # true, ce qui ferait rejouer l'animation à chaque page.
+        #
+        # On isole la ligne de DÉCLARATION (^ const MODE_REGLAGE =) au lieu
+        # de chercher la chaîne "MODE_REGLAGE = true" n'importe où : cette
+        # chaîne apparaît aussi dans le commentaire qui documente la
+        # variable, ce qui déclenchait un faux positif et bloquait le
+        # déploiement alors que la valeur était bien false.
         run: |
-          if grep -q "MODE_REGLAGE = true" js/main.js; then
+          declaration=$(grep -E '^[[:space:]]*const[[:space:]]+MODE_REGLAGE[[:space:]]*=' js/main.js | head -1)
+
+          if [ -z "$declaration" ]; then
+            echo "::error file=js/main.js::Déclaration de MODE_REGLAGE introuvable. Le garde-fou ne peut plus rien vérifier : déploiement annulé."
+            exit 1
+          fi
+
+          echo "Déclaration trouvée :$declaration"
+
+          if echo "$declaration" | grep -q 'true'; then
             echo "::error file=js/main.js::MODE_REGLAGE est à true : l'intro se rejouerait à chaque chargement. Déploiement annulé."
             exit 1
           fi
+
           echo "MODE_REGLAGE est bien à false."
 
       - name: Vérifier la syntaxe du PHP
