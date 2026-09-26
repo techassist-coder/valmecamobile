@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Contact et devis - Val'Meca Mobile | Mécanicien à domicile dans le Var</title>
+    <meta name="description" content="Demandez un devis gratuit à Val'Meca Mobile, mécanicien automobile à domicile dans le Var (83). Réponse rapide par téléphone au 07 52 03 68 15 ou via le formulaire.">
+    <link rel="canonical" href="https://valmecamobile.fr/contact.html">
+    <meta name="theme-color" content="#000000">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Val'Meca Mobile">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:title" content="Contact et devis - Val'Meca Mobile">
+    <meta property="og:description" content="Demandez un devis gratuit pour l'entretien, le diagnostic ou la réparation de votre véhicule, à domicile dans le Var (83).">
+    <meta property="og:url" content="https://valmecamobile.fr/contact.html">
+    <meta property="og:image" content="https://valmecamobile.fr/assets/images/logos/og-image.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="icon" href="assets/images/logos/favicon.png" sizes="any">
+    <link rel="apple-touch-icon" href="assets/images/logos/apple-touch-icon.png">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <a href="index.html" class="logo-link">
+                <img src="assets/images/logos/logo.png" alt="Val'Meca Mobile" class="logo-desktop" width="990" height="376">
+                <img src="assets/images/logos/logo_mini.png" alt="Val'Meca Mobile" class="logo-mobile" width="192" height="128">
+            </a>
+
+            <nav>
+                <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <ul class="nav-menu" id="nav-menu">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="index.html#services">Services</a></li>
+                    <li><a href="contact.html" class="is-active" aria-current="page">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="container">
+                <h1 class="section-title reveal">Nous <span>contacter</span></h1>
+
+                <div class="contact-info reveal">
+                    <div>
+                        <h2>Téléphone</h2>
+                        <p><a href="tel:+33752036815" class="lien-contact">07 52 03 68 15</a></p>
+                    </div>
+                    <div>
+                        <h2>Email</h2>
+                        <p><a href="mailto:contact@valmecamobile.fr" class="lien-contact">contact@valmecamobile.fr</a></p>
+                    </div>
+                    <div>
+                        <h2>Zone d'intervention</h2>
+                        <p>Var (83)</p>
+                    </div>
+                </div>
+
+                <form class="contact-form reveal reveal-delay-1" action="contact.php" method="post">
+                    <div class="form-group">
+                        <label for="name">Nom <span class="required-mark">*</span></label>
+                        <input type="text" id="name" name="name" maxlength="100" autocomplete="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email <span class="required-mark">*</span></label>
+                        <input type="email" id="email" name="email" maxlength="150" autocomplete="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Téléphone</label>
+                        <input type="tel" id="phone" name="phone" maxlength="30" autocomplete="tel">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="brand">Marque</label>
+                        <input type="text" id="brand" name="brand" maxlength="50">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="model">Modèle</label>
+                        <input type="text" id="model" name="model" maxlength="50">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="licensePlate">Immatriculation du véhicule <span class="required-mark">*</span></label>
+                        <input type="text" id="licensePlate" name="licensePlate" maxlength="20" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message <span class="required-mark">*</span></label>
+                        <textarea id="message" name="message" maxlength="5000" required></textarea>
+                    </div>
+
+                    <p class="required-note">* Champ obligatoire</p>
+
+                    <div class="form-consent">
+                        <input type="checkbox" id="consent" name="consent" value="1" required>
+                        <label for="consent">
+                            J'accepte que mes informations soient utilisées pour traiter ma demande.
+                            <span class="required-mark">*</span>
+                            <a href="confidentialite.html">Politique de confidentialité</a>
+                        </label>
+                    </div>
+
+                    <!-- Anti-spam : champ leurre masqué (les robots le remplissent, pas les humains) -->
+                    <div class="champ-leurre" aria-hidden="true">
+                        <label for="site_web">Site web</label>
+                        <input type="text" id="site_web" name="site_web" tabindex="-1" autocomplete="off">
+                    </div>
+                    <input type="hidden" name="horodatage" value="">
+
+                    <button type="submit" class="btn btn-primary">Envoyer</button>
+
+                    <p class="form-status" role="status" aria-live="polite"></p>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <ul class="footer-nav">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="index.html#services">Services</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="mentions-legales.html">Mentions légales</a></li>
+                <li><a href="confidentialite.html">Confidentialité</a></li>
+            </ul>
+            <p>&copy; 2026 Val'Meca Mobile - Mécanique automobile à domicile · <span class="site-version"></span></p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -3,64 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Val'Meca Mobile - Site en construction</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <title>Val'Meca Mobile - Mécanicien automobile à domicile dans le Var (83)</title>
+    <meta name="description" content="Val'Meca Mobile, votre garagiste se déplace chez vous partout dans le Var (83) : entretien, diagnostic électronique, embrayage, distribution. Devis gratuit au 07 52 03 68 15.">
+    <link rel="canonical" href="https://valmecamobile.fr/">
+    <meta name="theme-color" content="#000000">
 
-        body {
-            min-height: 100vh;
-            background: #000;
-            color: #fff;
-            font-family: Arial, Helvetica, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 24px;
-        }
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Val'Meca Mobile">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:title" content="Val'Meca Mobile - Mécanicien automobile à domicile dans le Var">
+    <meta property="og:description" content="Entretien, diagnostic, dépannage : la mécanique automobile se déplace directement chez vous, partout dans le Var (83). Devis gratuit.">
+    <meta property="og:url" content="https://valmecamobile.fr/">
+    <meta property="og:image" content="https://valmecamobile.fr/assets/images/logos/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
 
-        .logo {
-            max-width: 500px;
-            width: 100%;
-            height: auto;
-            margin-bottom: 40px;
-        }
+    <link rel="icon" href="assets/images/logos/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="assets/images/logos/favicon.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="assets/images/logos/favicon-192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="assets/images/logos/apple-touch-icon.png">
 
-        h1 {
-            font-size: clamp(1.5rem, 5vw, 2.5rem);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 16px;
-        }
-
-        h1 span {
-            color: #e10600;
-        }
-
-        p {
-            font-size: 1.1rem;
-            color: #ccc;
-            max-width: 500px;
-            line-height: 1.6;
-        }
-
-        .bar {
-            width: 80px;
-            height: 3px;
-            background: #e10600;
-            margin: 20px 0;
-        }
-    </style>
+    <link rel="preload" href="assets/fonts/ChakraPetch-BoldItalic.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <img src="logo.png" alt="Val'Meca Mobile" class="logo">
-    <h1>Site en <span>construction</span></h1>
-    <div class="bar"></div>
-    <p>Notre nouveau site arrive bientôt. Mécanique automobile à domicile, on s'occupe de tout !</p>
+    <div id="intro">
+        <div class="intro-scene" aria-hidden="true">
+            <img class="intro-camion" src="assets/images/gallery/camion.png" alt="" width="586" height="384">
+
+            <div class="intro-texte-bloc">
+                <div class="intro-rideau"></div>
+                <div class="intro-texte">
+                    <p class="intro-nom">VAL'MECA<br><span>MOBILE</span></p>
+                    <p class="intro-sous-titre">Mécanique automobile à domicile</p>
+                </div>
+            </div>
+        </div>
+
+        <button class="intro-passer" type="button">Passer l'intro</button>
+    </div>
+
+    <header class="site-header">
+        <div class="container">
+            <a href="index.html" class="logo-link">
+                <img src="assets/images/logos/logo.png" alt="Val'Meca Mobile" class="logo-desktop" width="379" height="144">
+                <img src="assets/images/logos/logo_mini.png" alt="Val'Meca Mobile" class="logo-mobile" width="216" height="144">
+            </a>
+
+            <nav>
+                <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <ul class="nav-menu" id="nav-menu">
+                    <li><a href="index.html" class="is-active" aria-current="page">Accueil</a></li>
+                    <li><a href="index.html#services">Services</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <img src="assets/images/logos/logo_complet.png" alt="Val'Meca Mobile - mécanique automobile à domicile" class="hero-logo reveal" width="960" height="480" fetchpriority="high">
+            <h1 class="reveal reveal-delay-1">Votre garagiste <span>vient à vous</span></h1>
+            <div class="bar reveal reveal-delay-1"></div>
+            <p class="reveal reveal-delay-2">Entretien, diagnostic, dépannage : la mécanique automobile se déplace directement chez vous, partout dans le Var (83).</p>
+
+            <div class="hero-devis reveal reveal-delay-2">
+                <h2>Demandez votre devis gratuit</h2>
+                <p>Vous avez besoin d'une réparation, d'un entretien ou d'une intervention mécanique à domicile ? Avec Val'Meca Mobile, vous pouvez obtenir rapidement un devis personnalisé adapté à votre véhicule et à vos besoins.</p>
+                <p>Décrivez-nous votre demande (marque, modèle, année du véhicule, travaux souhaités) et nous vous répondrons avec une estimation claire et transparente.</p>
+                <ul class="hero-devis-list">
+                    <li>Pas de déplacement inutile</li>
+                    <li>Tarifs annoncés avant intervention</li>
+                    <li>Service de mécanique à domicile dans le Var</li>
+                    <li>Intervention directement chez vous ou sur votre lieu de travail</li>
+                </ul>
+                <p>Remplissez notre formulaire de demande de devis et bénéficiez d'un accompagnement professionnel pour l'entretien et la réparation de votre véhicule.</p>
+            </div>
+
+            <a href="contact.html" class="btn btn-primary reveal reveal-delay-3">Demander un devis (gratuit)</a>
+        </section>
+
+        <section id="services" class="section">
+            <div class="container">
+                <h2 class="section-title reveal">Nos <span>services</span></h2>
+
+                <div class="card-grid">
+                    <div class="card reveal">
+                        <h3>Entretien</h3>
+                        <p>Pneus, Vidange, freins, filtres... l'entretien courant réalisé directement chez vous.</p>
+                    </div>
+
+                    <div class="card reveal reveal-delay-1">
+                        <h3>Diagnostic</h3>
+                        <p>Détection de pannes et diagnostic électronique sur place.</p>
+                    </div>
+
+                    <div class="card reveal reveal-delay-2">
+                        <h3>Gros oeuvre</h3>
+                        <p>Embrayage, turbo, courroies de distribution, injecteurs... </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <ul class="footer-nav">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="index.html#services">Services</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="mentions-legales.html">Mentions légales</a></li>
+                <li><a href="confidentialite.html">Confidentialité</a></li>
+            </ul>
+            <p>&copy; 2026 Val'Meca Mobile - Mécanique automobile à domicile · <span class="site-version"></span></p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+
+    <!--
+      Données structurées : permettent à Google d'afficher l'activité comme un
+      commerce local (téléphone, zone desservie, prestations) dans ses résultats.
+      À COMPLÉTER quand les informations légales seront connues : adresse
+      postale, horaires réels, latitude/longitude.
+    -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "AutoRepair",
+        "name": "Val'Meca Mobile",
+        "description": "Mécanique automobile à domicile dans le Var : entretien, diagnostic électronique, embrayage, courroies de distribution.",
+        "url": "https://valmecamobile.fr/",
+        "logo": "https://valmecamobile.fr/assets/images/logos/logo.png",
+        "image": "https://valmecamobile.fr/assets/images/logos/og-image.jpg",
+        "telephone": "+33752036815",
+        "email": "contact@valmecamobile.fr",
+        "priceRange": "€€",
+        "founder": {
+            "@type": "Person",
+            "name": "Valentin Croses"
+        },
+        "areaServed": {
+            "@type": "AdministrativeArea",
+            "name": "Var (83)"
+        },
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "85 impasse Lou Biou, La Réserve, bâtiment A, lot 14",
+            "postalCode": "83400",
+            "addressLocality": "Hyères",
+            "addressRegion": "Var",
+            "addressCountry": "FR"
+        },
+        "makesOffer": [
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Entretien courant à domicile" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Diagnostic électronique" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Embrayage, turbo, distribution, injecteurs" } }
+        ]
+    }
+    </script>
 </body>
 </html>

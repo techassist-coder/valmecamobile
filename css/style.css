@@ -1,0 +1,929 @@
+/* =========================================================
+   Fonts
+   ========================================================= */
+/* Chakra Petch remplace Eurostile, qui etait une police commerciale
+   utilisee sans licence. Chakra Petch est sous SIL Open Font License 1.1
+   (voir assets/fonts/OFL-ChakraPetch.txt), donc librement utilisable et
+   redistribuable sur un site public.
+
+   La plage "700 900" permet au navigateur d'utiliser ce fichier pour
+   toutes les graisses demandees entre 700 et 900, sans fabriquer de faux
+   gras : les titres du site demandent 900, le fichier est un Bold 700. */
+@font-face {
+    font-family: 'Chakra Petch';
+    src: url('../assets/fonts/ChakraPetch-Bold.woff2') format('woff2'),
+         url('../assets/fonts/ChakraPetch-Bold.ttf') format('truetype');
+    font-weight: 700 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Chakra Petch';
+    src: url('../assets/fonts/ChakraPetch-BoldItalic.woff2') format('woff2'),
+         url('../assets/fonts/ChakraPetch-BoldItalic.ttf') format('truetype');
+    font-weight: 700 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('../assets/fonts/Roboto-Variable.woff2') format('woff2-variations'),
+         url('../assets/fonts/Roboto-Variable.ttf') format('truetype-variations');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('../assets/fonts/Roboto-Italic-Variable.woff2') format('woff2-variations'),
+         url('../assets/fonts/Roboto-Italic-Variable.ttf') format('truetype-variations');
+    font-weight: 100 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+/* =========================================================
+   Variables
+   ========================================================= */
+:root {
+    /* Fond noir : couleur de fond principale, étendue à tout le site */
+    --color-anthracite: #000000;
+    --color-anthracite-alt: #242424;
+
+    /* Rouge utilisé sur fond clair (nuancé, premium) vs sur fond anthracite (celui du logo) */
+    --color-red-on-light: #b90712;
+    --color-red-on-light-hover: #8f0510;
+    --color-red: #e10f1b;
+    --color-red-hover: #ff3b45;
+
+    --color-white: #ffffff;
+    --color-gray: #cccccc;
+    --color-gray-light: #f2f2f2;
+    --color-gray-dark: #555555;
+
+    --font-title: 'Chakra Petch', Arial, sans-serif;
+    --font-main: 'Roboto', Arial, Helvetica, sans-serif;
+
+    --transition-fast: 0.2s ease;
+    --transition-medium: 0.4s ease;
+    --transition-slow: 0.8s ease;
+
+    --header-height: 80px;
+    --radius: 6px;
+    --max-width: 1200px;
+
+    /* Durées centralisées : pour régler le rythme de l'intro,
+       tu ne touches qu'ici. */
+    --duree-camion: 1.15s;
+    --duree-texte: 1.3s;
+    --duree-sortie: 1s;
+}
+
+/* =========================================================
+   Reset
+   ========================================================= */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-main);
+    background: var(--color-anthracite);
+    color: var(--color-white);
+    line-height: 1.6;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+button,
+input,
+textarea {
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* =========================================================
+   Layout / utilities
+   ========================================================= */
+.container {
+    width: min(var(--max-width), 90%);
+    margin-inline: auto;
+}
+
+.section {
+    padding-block: 80px;
+}
+
+.section-title {
+    font-family: var(--font-title);
+    font-style: italic;
+    font-weight: 900;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.section-title span {
+    color: var(--color-red);
+}
+
+/* =========================================================
+   Header / navigation
+   ========================================================= */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    background: var(--color-anthracite);
+    border-bottom: 1px solid var(--color-anthracite-alt);
+}
+
+.site-header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo-link {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.logo-link img {
+    height: 48px;
+    width: auto;
+}
+
+.logo-link .logo-mobile {
+    display: none;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 32px;
+}
+
+.nav-menu a {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    transition: color var(--transition-fast);
+}
+
+.nav-menu a:hover,
+.nav-menu a.is-active {
+    color: var(--color-red);
+}
+
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+}
+
+.nav-toggle span {
+    width: 26px;
+    height: 2px;
+    background: var(--color-white);
+    transition: transform var(--transition-fast), opacity var(--transition-fast);
+}
+
+/* =========================================================
+   Hero
+   ========================================================= */
+.hero {
+    min-height: calc(100vh - var(--header-height));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 24px;
+}
+
+.hero-logo {
+    max-width: 480px;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.hero h1 {
+    font-family: var(--font-title);
+    font-style: italic;
+    font-weight: 900;
+    font-size: clamp(1.6rem, 5vw, 2.6rem);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+}
+
+.hero h1 span {
+    color: var(--color-red);
+}
+
+.hero p {
+    font-size: 1.1rem;
+    color: var(--color-gray);
+    max-width: 500px;
+    margin-inline: auto;
+    margin-bottom: 32px;
+}
+
+.bar {
+    width: 80px;
+    height: 3px;
+    background: var(--color-red);
+    margin: 20px auto;
+}
+
+.hero-devis {
+    max-width: 640px;
+    margin: 8px auto 32px;
+    text-align: left;
+}
+
+.hero-devis h2 {
+    font-family: var(--font-title);
+    font-style: italic;
+    font-weight: 900;
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--color-red);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.hero-devis p {
+    font-size: 1rem;
+    color: var(--color-gray);
+    margin-bottom: 16px;
+}
+
+.hero-devis-list {
+    display: grid;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.hero-devis-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: var(--color-white);
+}
+
+.hero-devis-list li::before {
+    content: "\2713";
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--color-red);
+    color: var(--color-white);
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+/* =========================================================
+   Buttons
+   ========================================================= */
+.btn {
+    display: inline-block;
+    padding: 14px 32px;
+    border-radius: var(--radius);
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    font-size: 0.95rem;
+    transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.btn-primary {
+    background: var(--color-red);
+    color: var(--color-white);
+}
+
+.btn-primary:hover {
+    background: var(--color-red-hover);
+    transform: translateY(-2px);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--color-white);
+    color: var(--color-white);
+}
+
+.btn-outline:hover {
+    background: var(--color-white);
+    color: var(--color-anthracite);
+}
+
+/* =========================================================
+   Cards
+   ========================================================= */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+}
+
+.card {
+    background: var(--color-anthracite-alt);
+    border: 1px solid #2e2e2e;
+    border-radius: var(--radius);
+    padding: 32px 24px;
+    text-align: center;
+}
+
+.card img,
+.card svg {
+    margin-inline: auto;
+    margin-bottom: 16px;
+}
+
+.card h3 {
+    font-family: var(--font-title);
+    font-style: italic;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+}
+
+.card p {
+    color: var(--color-gray);
+    font-size: 0.95rem;
+}
+
+/* Section services : fond blanc pour trancher avec le reste du site sombre */
+#services {
+    background: var(--color-white);
+}
+
+#services .section-title {
+    color: var(--color-anthracite);
+}
+
+#services .section-title span {
+    color: var(--color-red-on-light);
+}
+
+#services .card {
+    background: var(--color-gray-light);
+    border-color: #e0e0e0;
+}
+
+#services .card h3 {
+    color: var(--color-anthracite);
+}
+
+#services .card p {
+    color: var(--color-gray-dark);
+}
+
+/* =========================================================
+   Forms (page contact)
+   ========================================================= */
+.contact-form {
+    max-width: 600px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    color: var(--color-gray);
+}
+
+.required-mark {
+    color: var(--color-red);
+}
+
+.required-note {
+    font-size: 0.85rem;
+    color: var(--color-gray);
+    text-align: right;
+}
+
+.form-group input,
+.form-group textarea {
+    background: var(--color-anthracite-alt);
+    border: 1px solid #333;
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    color: var(--color-white);
+    transition: border-color var(--transition-fast);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-red);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 140px;
+}
+
+.form-status {
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.form-status.success {
+    color: #3fd15a;
+}
+
+.form-status.error {
+    color: var(--color-red);
+}
+
+.contact-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    margin-bottom: 60px;
+    text-align: center;
+}
+
+.contact-info h2,
+.contact-info h3 {
+    font-family: var(--font-title);
+    font-style: italic;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 1rem;
+    margin-bottom: 8px;
+    color: var(--color-red);
+}
+
+.contact-info p {
+    color: var(--color-gray);
+}
+
+/* =========================================================
+   Footer
+   ========================================================= */
+.site-footer {
+    border-top: 1px solid var(--color-anthracite-alt);
+    padding-block: 32px;
+    text-align: center;
+    color: var(--color-gray);
+    font-size: 0.9rem;
+}
+
+/* ============================================================
+   1. L'OVERLAY
+   position: fixed + inset: 0 → couvre tout l'écran, quoi qu'il
+   y ait dessous. z-index élevé pour passer devant le site.
+   ============================================================ */
+#intro {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* le camion arrive de hors-écran : on cache le débord */
+    background: var(--color-anthracite);
+    transform-origin: 50% 45%; /* repris par le JS avec la position réelle de l'image du hero */
+}
+
+.intro-scene {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    padding: 24px;
+}
+
+/* ============================================================
+   PHASE 1 — Le camion entre de la gauche et pile d'un coup
+   ------------------------------------------------------------
+   État initial : hors écran à gauche (translateX(-120vw)).
+   La classe .phase-camion (posée par le JS) déclenche l'animation.
+   Le "coup de frein" vient du cubic-bezier : le 2e chiffre > 1
+   fait DÉPASSER la cible de quelques pixels avant de revenir.
+   ============================================================ */
+.intro-camion {
+    width: min(42vw, 480px);
+    height: auto;
+    transform: translateX(-120vw); /* état de départ : invisible à gauche */
+}
+
+#intro.phase-camion .intro-camion {
+    animation: camion-entre var(--duree-camion) cubic-bezier(0.22, 1.2, 0.36, 1) forwards;
+}
+
+@keyframes camion-entre {
+    from { transform: translateX(-120vw); }
+    to   { transform: translateX(0); }
+}
+
+/* ============================================================
+   PHASE 2 — Balayage rouge + apparition du texte
+   ------------------------------------------------------------
+   Technique du "rideau" : un panneau rouge couvre le bloc texte,
+   grandit depuis la gauche (scaleX 0 → 1), puis se rétracte vers
+   la droite (scaleX 1 → 0). Le texte devient visible à mi-course,
+   pendant qu'il est caché derrière le rideau. À l'œil : une barre
+   rouge balaye le bloc et le texte apparaît dans son sillage.
+   scaleX plutôt que width → règle transform/opacity respectée.
+   ============================================================ */
+.intro-texte-bloc {
+    position: relative; /* référence de positionnement pour le rideau */
+}
+
+.intro-rideau {
+    position: absolute;
+    inset: 0;
+    background: var(--color-red);
+    transform: scaleX(0); /* invisible au départ (aplati) */
+}
+
+.intro-texte {
+    opacity: 0; /* caché tant que le rideau n'est pas passé */
+    border-left: 6px solid var(--color-red); /* la barre verticale du logo */
+    padding-left: 24px;
+}
+
+.intro-nom {
+    font-family: var(--font-title);
+    font-style: italic;
+    font-weight: 900;
+    font-size: clamp(2.6rem, 6vw, 4.5rem);
+    line-height: 1.05;
+    color: var(--color-white);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.intro-nom span {
+    color: var(--color-red);
+}
+
+.intro-sous-titre {
+    margin-top: 10px;
+    font-size: clamp(0.75rem, 1.5vw, 1rem);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--color-gray);
+}
+
+#intro.phase-texte .intro-rideau {
+    animation: rideau-balaye var(--duree-texte) ease-in-out forwards;
+}
+
+#intro.phase-texte .intro-texte {
+    animation: texte-apparait var(--duree-texte) linear forwards;
+}
+
+@keyframes rideau-balaye {
+    0%    { transform: scaleX(0); transform-origin: left; }
+    50%   { transform: scaleX(1); transform-origin: left; }   /* le rideau couvre tout */
+    50.1% { transform: scaleX(1); transform-origin: right; }  /* on change de côté d'ancrage */
+    100%  { transform: scaleX(0); transform-origin: right; }  /* il se rétracte vers la droite */
+}
+
+@keyframes texte-apparait {
+    0%, 49%   { opacity: 0; } /* caché tant que le rideau le recouvre */
+    51%, 100% { opacity: 1; } /* révélé dans le sillage du rideau */
+}
+
+/* ============================================================
+   PHASE 3 — L'intro se réduit vers l'image du hero et disparaît
+   ------------------------------------------------------------
+   L'overlay entier rétrécit vers l'image mise en avant dans le
+   hero (là où vit le logo complet du site) en fondant. Le site,
+   déjà chargé dessous, se retrouve naturellement à découvert.
+   Le JS supprime ensuite l'overlay du DOM (animationend).
+   ============================================================ */
+#intro.phase-sortie {
+    animation: intro-sortie var(--duree-sortie) ease-in forwards;
+}
+
+@keyframes intro-sortie {
+    from { transform: scale(1); opacity: 1; }
+    to   { transform: scale(0.25); opacity: 0; }
+}
+
+/* ============================================================
+   Bouton "Passer" — discret mais toujours accessible
+   ============================================================ */
+.intro-passer {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    background: transparent;
+    border: 1px solid var(--color-gray);
+    color: var(--color-gray);
+    font-family: var(--font-main);
+    font-size: 0.85rem;
+    padding: 8px 18px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.intro-passer:hover {
+    border-color: var(--color-white);
+    color: var(--color-white);
+}
+
+/* ============================================================
+   GARDE-FOUS (double sécurité avec le JS)
+   - Petit écran : pas d'intro
+   - prefers-reduced-motion : réglage système d'accessibilité,
+     certaines personnes sont sensibles au mouvement → on respecte
+   ============================================================ */
+@media (max-width: 768px), (prefers-reduced-motion: reduce) {
+    #intro {
+        display: none;
+    }
+}
+
+/* =========================================================
+   Animations
+   ========================================================= */
+.reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity var(--transition-slow), transform var(--transition-slow);
+}
+
+.reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* =========================================================
+   Liens de contact (telephone / email cliquables)
+   ========================================================= */
+.lien-contact {
+    color: var(--color-gray);
+    border-bottom: 1px solid transparent;
+    transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.lien-contact:hover,
+.lien-contact:focus-visible {
+    color: var(--color-white);
+    border-bottom-color: var(--color-red);
+}
+
+/* =========================================================
+   Formulaire : consentement RGPD et champ anti-spam
+   ========================================================= */
+.form-consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.form-consent input[type="checkbox"] {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin-top: 3px;
+    accent-color: var(--color-red);
+    cursor: pointer;
+}
+
+.form-consent label {
+    font-size: 0.9rem;
+    color: var(--color-gray);
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+.form-consent a {
+    color: var(--color-red);
+    text-decoration: underline;
+}
+
+.form-consent a:hover {
+    color: var(--color-red-hover);
+}
+
+/* Pot de miel : invisible pour les humains, rempli par les robots.
+   On evite display:none, que certains robots detectent. */
+.champ-leurre {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* Bouton d'envoi pendant la soumission */
+.contact-form button[type="submit"]:disabled {
+    opacity: 0.6;
+    cursor: wait;
+    transform: none;
+}
+
+/* =========================================================
+   Pied de page : navigation secondaire
+   ========================================================= */
+.footer-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px 24px;
+    margin-bottom: 20px;
+}
+
+.footer-nav a {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color var(--transition-fast);
+}
+
+.footer-nav a:hover,
+.footer-nav a:focus-visible {
+    color: var(--color-red);
+}
+
+/* =========================================================
+   Pages legales (mentions legales, confidentialite, 404)
+   ========================================================= */
+.legal {
+    max-width: 800px;
+}
+
+.legal h2 {
+    font-family: var(--font-title);
+    font-style: italic;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 1.15rem;
+    letter-spacing: 0.5px;
+    color: var(--color-red);
+    margin-top: 40px;
+    margin-bottom: 12px;
+}
+
+.legal h3 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 24px;
+    margin-bottom: 8px;
+}
+
+.legal p,
+.legal li {
+    color: var(--color-gray);
+    margin-bottom: 12px;
+}
+
+.legal ul {
+    list-style: disc;
+    padding-left: 22px;
+    margin-bottom: 16px;
+}
+
+.legal a {
+    color: var(--color-red);
+    text-decoration: underline;
+}
+
+.legal a:hover {
+    color: var(--color-red-hover);
+}
+
+.legal .a-completer {
+    background: rgba(225, 15, 27, 0.12);
+    border-left: 3px solid var(--color-red);
+    padding: 2px 8px;
+    color: var(--color-white);
+    font-weight: 600;
+}
+
+.legal-maj {
+    font-size: 0.85rem;
+    font-style: italic;
+    margin-top: 48px;
+}
+
+/* =========================================================
+   Focus visible : accessibilite clavier sur tout le site
+   ========================================================= */
+:focus-visible {
+    outline: 2px solid var(--color-red);
+    outline-offset: 3px;
+}
+
+/* =========================================================
+   Responsive
+   ========================================================= */
+@media (max-width: 768px) {
+    .logo-link .logo-desktop {
+        display: none;
+    }
+
+    .logo-link .logo-mobile {
+        display: block;
+    }
+
+    .section {
+        padding-block: 56px;
+    }
+
+    .nav-menu {
+        position: absolute;
+        top: var(--header-height);
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: var(--color-anthracite);
+        border-bottom: 1px solid var(--color-anthracite-alt);
+        padding: 24px;
+        gap: 20px;
+        transform: translateY(-150%);
+        opacity: 0;
+        /* visibility: hidden retire les liens du parcours clavier quand le
+           menu est ferme (sans lui, on tabule dans un menu invisible). */
+        visibility: hidden;
+        transition: transform var(--transition-medium), opacity var(--transition-medium),
+                    visibility var(--transition-medium);
+    }
+
+    .nav-menu.is-open {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .nav-toggle {
+        display: flex;
+    }
+
+    .nav-toggle.is-active span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+
+    .nav-toggle.is-active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .nav-toggle.is-active span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+    }
+}

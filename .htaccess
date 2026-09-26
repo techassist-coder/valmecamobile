@@ -1,0 +1,142 @@
+# =====================================================================
+# Val'Meca Mobile - configuration Apache (hébergement mutualisé OVH)
+# =====================================================================
+# Chaque bloc est encadré par <IfModule> : si un module n'est pas activé
+# sur le serveur, la directive est ignorée au lieu de provoquer une
+# erreur 500. Ce fichier est donc sûr à déposer tel quel.
+# =====================================================================
+
+AddDefaultCharset UTF-8
+
+# ---------------------------------------------------------------------
+# Page d'erreur personnalisée
+# ---------------------------------------------------------------------
+ErrorDocument 404 /404.html
+
+# ---------------------------------------------------------------------
+# Pas de listing des dossiers (sinon /assets/ affiche son contenu)
+# ---------------------------------------------------------------------
+Options -Indexes
+
+# ---------------------------------------------------------------------
+# Redirections : HTTPS obligatoire + une seule adresse canonique
+# ---------------------------------------------------------------------
+# Adresse canonique retenue : https://valmecamobile.fr (SANS www).
+#
+# Pourquoi sans www : le certificat Let's Encrypt généré sur cet
+# hébergement ne couvre QUE valmecamobile.fr. Son champ
+# "Subject Alternative Name" ne contient pas www.valmecamobile.fr, donc
+# toute redirection vers https://www. provoquerait une erreur de
+# certificat et rendrait le site inaccessible.
+#
+# Si le certificat est un jour régénéré en incluant www, ces règles
+# restent valables : www continuera simplement d'être redirigé.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # 1. Retirer le www en premier, tant qu'on est encore en HTTP.
+    #    L'ordre compte : on ne doit JAMAIS envoyer un visiteur vers
+    #    https://www., que le certificat ne sait pas présenter.
+    RewriteCond %{HTTP_HOST} ^www\.valmecamobile\.fr$ [NC]
+    RewriteRule ^(.*)$ http://valmecamobile.fr/$1 [R=301,L]
+
+    # 2. Forcer le HTTPS sur le domaine nu.
+    #    Sur OVH, la variable %{HTTPS} n'est pas toujours fiable derrière
+    #    le répartiteur de charge : on teste aussi l'en-tête transmis.
+    RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^(.*)$ https://valmecamobile.fr/$1 [R=301,L]
+</IfModule>
+
+# ---------------------------------------------------------------------
+# Fichiers à ne jamais servir
+# ---------------------------------------------------------------------
+# Important avec le déploiement Git d'OVH : le dossier .git se retrouve
+# sur le serveur et exposerait tout l'historique du code.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^\.git - [F,L]
+    RewriteRule ^\.git/ - [F,L]
+</IfModule>
+
+<FilesMatch "^\.(git|gitattributes|gitignore|htaccess|htpasswd|env)">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+<FilesMatch "\.(md|patch|log|bak|sql)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# ---------------------------------------------------------------------
+# En-têtes de sécurité
+# ---------------------------------------------------------------------
+<IfModule mod_headers.c>
+    # Empêche le navigateur de "devenir" le type MIME d'un fichier
+    Header always set X-Content-Type-Options "nosniff"
+    # Interdit l'affichage du site dans une iframe d'un autre domaine
+    Header always set X-Frame-Options "SAMEORIGIN"
+    # Ne transmet pas l'URL complète aux sites externes
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    # Le site n'a besoin d'aucune de ces permissions navigateur
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+
+    # Les polices doivent être servies avec un cache long et sans en-tête
+    # de cookie inutile
+    <FilesMatch "\.(woff2|woff|ttf)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+</IfModule>
+
+# ---------------------------------------------------------------------
+# Compression : divise par ~4 le poids du HTML, CSS et JS
+# ---------------------------------------------------------------------
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+    AddOutputFilterByType DEFLATE application/javascript application/json
+    AddOutputFilterByType DEFLATE application/xml image/svg+xml
+    # Ne PAS compresser les woff2 ni les images : déjà compressés
+</IfModule>
+
+# ---------------------------------------------------------------------
+# Mise en cache navigateur
+# ---------------------------------------------------------------------
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 week"
+
+    # Le HTML doit rester frais : une modification du site doit être
+    # visible immédiatement par les visiteurs
+    ExpiresByType text/html "access plus 0 seconds"
+
+    # Ressources versionnées par le contenu : cache long
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType font/ttf "access plus 1 year"
+</IfModule>
+
+# ---------------------------------------------------------------------
+# Types MIME (au cas où le serveur ne les connaîtrait pas)
+# ---------------------------------------------------------------------
+<IfModule mod_mime.c>
+    AddType font/woff2 .woff2
+    AddType font/ttf .ttf
+    AddType image/x-icon .ico
+    AddType application/manifest+json .webmanifest
+</IfModule>

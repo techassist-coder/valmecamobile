@@ -1,0 +1,20 @@
+# Fichiers système
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Éditeurs
+.vscode/
+.idea/
+*.swp
+*~
+
+# Dépendances éventuelles
+node_modules/
+
+# Fichier d'état créé par l'action de déploiement FTP sur le serveur
+.ftp-deploy-sync-state.json
+
+# Travail local temporaire
+*.bak
+*.log
