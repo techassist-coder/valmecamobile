@@ -4,4 +4,4 @@ Allow: /
 # Le script de traitement du formulaire n'a rien à indexer
 Disallow: /contact.php
 
-Sitemap: https://www.valmecamobile.fr/sitemap.xml
+Sitemap: https://valmecamobile.fr/sitemap.xml

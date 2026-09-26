@@ -1,20 +1,28 @@
 /* =========================================================
    Fonts
    ========================================================= */
+/* Chakra Petch remplace Eurostile, qui etait une police commerciale
+   utilisee sans licence. Chakra Petch est sous SIL Open Font License 1.1
+   (voir assets/fonts/OFL-ChakraPetch.txt), donc librement utilisable et
+   redistribuable sur un site public.
+
+   La plage "700 900" permet au navigateur d'utiliser ce fichier pour
+   toutes les graisses demandees entre 700 et 900, sans fabriquer de faux
+   gras : les titres du site demandent 900, le fichier est un Bold 700. */
 @font-face {
-    font-family: 'Eurostile';
-    src: url('../assets/fonts/Eurostile-Black.woff2') format('woff2'),
-         url('../assets/fonts/Eurostile-Black.ttf') format('truetype');
-    font-weight: 900;
+    font-family: 'Chakra Petch';
+    src: url('../assets/fonts/ChakraPetch-Bold.woff2') format('woff2'),
+         url('../assets/fonts/ChakraPetch-Bold.ttf') format('truetype');
+    font-weight: 700 900;
     font-style: normal;
     font-display: swap;
 }
 
 @font-face {
-    font-family: 'Eurostile';
-    src: url('../assets/fonts/Eurostile-BlackItalic.woff2') format('woff2'),
-         url('../assets/fonts/Eurostile-BlackItalic.ttf') format('truetype');
-    font-weight: 900;
+    font-family: 'Chakra Petch';
+    src: url('../assets/fonts/ChakraPetch-BoldItalic.woff2') format('woff2'),
+         url('../assets/fonts/ChakraPetch-BoldItalic.ttf') format('truetype');
+    font-weight: 700 900;
     font-style: italic;
     font-display: swap;
 }
@@ -56,7 +64,7 @@
     --color-gray-light: #f2f2f2;
     --color-gray-dark: #555555;
 
-    --font-title: 'Eurostile', Arial, sans-serif;
+    --font-title: 'Chakra Petch', Arial, sans-serif;
     --font-main: 'Roboto', Arial, Helvetica, sans-serif;
 
     --transition-fast: 0.2s ease;

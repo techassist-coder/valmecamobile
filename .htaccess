@@ -19,24 +19,33 @@ ErrorDocument 404 /404.html
 Options -Indexes
 
 # ---------------------------------------------------------------------
-# Redirections : HTTPS obligatoire + une seule adresse canonique (www)
+# Redirections : HTTPS obligatoire + une seule adresse canonique
 # ---------------------------------------------------------------------
-# Pourquoi : sans ça, le site répond sur 4 adresses différentes
-# (http/https x avec/sans www), ce que Google considère comme du contenu
-# dupliqué. On force tout vers https://www.valmecamobile.fr
+# Adresse canonique retenue : https://valmecamobile.fr (SANS www).
+#
+# Pourquoi sans www : le certificat Let's Encrypt généré sur cet
+# hébergement ne couvre QUE valmecamobile.fr. Son champ
+# "Subject Alternative Name" ne contient pas www.valmecamobile.fr, donc
+# toute redirection vers https://www. provoquerait une erreur de
+# certificat et rendrait le site inaccessible.
+#
+# Si le certificat est un jour régénéré en incluant www, ces règles
+# restent valables : www continuera simplement d'être redirigé.
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # 1. Forcer le HTTPS
+    # 1. Retirer le www en premier, tant qu'on est encore en HTTP.
+    #    L'ordre compte : on ne doit JAMAIS envoyer un visiteur vers
+    #    https://www., que le certificat ne sait pas présenter.
+    RewriteCond %{HTTP_HOST} ^www\.valmecamobile\.fr$ [NC]
+    RewriteRule ^(.*)$ http://valmecamobile.fr/$1 [R=301,L]
+
+    # 2. Forcer le HTTPS sur le domaine nu.
     #    Sur OVH, la variable %{HTTPS} n'est pas toujours fiable derrière
     #    le répartiteur de charge : on teste aussi l'en-tête transmis.
     RewriteCond %{HTTP:X-Forwarded-Proto} !=https
     RewriteCond %{HTTPS} !=on
-    RewriteRule ^(.*)$ https://www.valmecamobile.fr/$1 [R=301,L]
-
-    # 2. Forcer le sous-domaine www
-    RewriteCond %{HTTP_HOST} ^valmecamobile\.fr$ [NC]
-    RewriteRule ^(.*)$ https://www.valmecamobile.fr/$1 [R=301,L]
+    RewriteRule ^(.*)$ https://valmecamobile.fr/$1 [R=301,L]
 </IfModule>
 
 # ---------------------------------------------------------------------
