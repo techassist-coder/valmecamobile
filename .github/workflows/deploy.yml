@@ -104,7 +104,13 @@ jobs:
           hote=$(printf '%s' "$hote" | tr -d '[:space:]')
           hote=$(printf '%s' "$hote" | sed -E 's#^[A-Za-z]+://##')
           hote="${hote%%/*}"
+          # L'identifiant précède parfois le nom d'hôte quand on recopie une
+          # ligne du type ftp://identifiant@ftp.clusterNNN.hosting.ovh.net :
+          # on ne garde que ce qui suit le dernier @.
+          hote="${hote##*@}"
           hote="${hote%%:*}"
+          # points superflus en début ou fin
+          hote=$(printf '%s' "$hote" | sed -E 's#^\.+##; s#\.+$##')
 
           # La valeur nettoyée est une chaîne différente du secret : GitHub
           # ne la masquerait donc plus automatiquement. On le lui demande
@@ -129,7 +135,29 @@ jobs:
           # getent ahosts interroge les deux familles d'adresses, IPv4 et
           # IPv6. La commande est toujours présente sur un runner Ubuntu.
           if ! getent ahosts "$hote" > /dev/null 2>&1; then
-            echo "::error::Le nom d'hôte de FTP_SERVER ne se résout pas en DNS, même après nettoyage. C'est la cause de l'erreur getaddrinfo ENOTFOUND. Vérifier la valeur dans OVH > Hébergement > onglet FTP-SSH."
+            # Diagnostic de STRUCTURE : on décrit la forme de la valeur sans
+            # jamais l'afficher, afin de pouvoir corriger sans divulguer le
+            # secret dans les journaux d'un dépôt public. Ces indications ne
+            # révèlent aucun identifiant.
+            echo "Analyse de la valeur nettoyée, sans l'afficher :"
+            echo "  longueur                       : ${#hote} caractères"
+            case "$hote" in
+              *@*) echo "  contient encore un @           : OUI (identifiant collé au nom d'hôte)" ;;
+              *)   echo "  contient encore un @           : non" ;;
+            esac
+            nb_points=$(printf '%s' "$hote" | tr -cd '.' | wc -c)
+            echo "  nombre de points               : $nb_points"
+            case "$hote" in
+              *.ovh.net) echo "  se termine par .ovh.net        : OUI" ;;
+              *.fr)      echo "  se termine par .fr             : OUI" ;;
+              *)         echo "  terminaison attendue           : NON (ni .ovh.net ni .fr)" ;;
+            esac
+            case "$hote" in
+              *[!a-zA-Z0-9.-]*) echo "  caractères inattendus          : OUI (autre chose que lettres, chiffres, points, tirets)" ;;
+              *)                echo "  caractères inattendus          : non" ;;
+            esac
+
+            echo "::error::Le nom d'hôte de FTP_SERVER ne se résout pas en DNS, même après nettoyage. Comparer l'analyse ci-dessus avec la valeur attendue : un nom seul, du type ftp.clusterNNN.hosting.ovh.net, visible dans OVH > Hébergement > onglet FTP-SSH."
             exit 1
           fi
 
