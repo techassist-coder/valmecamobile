@@ -171,9 +171,21 @@ jobs:
           server: ${{ steps.ftp.outputs.hote }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          # FTPS = FTP chiffré. Si OVH refuse la connexion, remplacer par
-          # « ftp » (moins sûr : le mot de passe circule en clair).
-          protocol: ftps
+          # FTP NON CHIFFRÉ — choix contraint, pas préférence.
+          #
+          # "ftps" (FTP over TLS) a été essayé en premier : le serveur OVH
+          # répond « 500 This security scheme is not implemented » à la
+          # commande AUTH TLS, autrement dit il ne sait pas faire de FTPS
+          # sur cette offre. Le SFTP, lui, exige un accès SSH, absent de
+          # l'hébergement gratuit.
+          #
+          # Ce qu'il faut savoir : l'identifiant et le mot de passe FTP
+          # transitent donc en clair entre GitHub et OVH. Ils ne donnent
+          # accès qu'à l'espace d'hébergement de ce site. À n'utiliser
+          # qu'avec un mot de passe dédié, jamais réutilisé ailleurs.
+          # Passer à une offre OVH avec SSH permettrait de basculer en
+          # sftp et de supprimer cette exposition.
+          protocol: ftp
           # Racine du site sur l'hébergement OVH
           server-dir: ./www/
           local-dir: ./
