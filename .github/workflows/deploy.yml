@@ -19,6 +19,13 @@
 #   FTP_USERNAME  l'identifiant FTP affiché sur la même page
 #   FTP_PASSWORD  le mot de passe FTP
 #
+# ET, seulement si la racine du site n'est pas « www », une VARIABLE
+# (onglet Variables, pas Secrets) :
+#
+#   FTP_SERVER_DIR  ex. ./monclient/  — valeur lue dans OVH > Hébergement
+#                   > Multisite > colonne « Dossier racine ». Par défaut
+#                   ./www/, qui est la convention OVH.
+#
 # Ces valeurs sont chiffrées par GitHub. Ne JAMAIS les écrire dans un
 # fichier du dépôt.
 # =====================================================================
@@ -174,6 +181,7 @@ jobs:
           HOTE: ${{ steps.ftp.outputs.hote }}
           UTILISATEUR: ${{ secrets.FTP_USERNAME }}
           MDP: ${{ secrets.FTP_PASSWORD }}
+          CIBLE: ${{ vars.FTP_SERVER_DIR || './www/' }}
         run: |
           # Le contenu est publié en annotation, et pas seulement dans le
           # journal : sur un dépôt public, le journal complet n'est
@@ -197,8 +205,7 @@ jobs:
           }
 
           lister "/"
-          lister "/valmecamobile/"
-          lister "/www/"
+          lister "/${CIBLE#./}"
 
       - name: Transférer par FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -222,17 +229,17 @@ jobs:
           # Passer à une offre OVH avec SSH permettrait de basculer en
           # sftp et de supprimer cette exposition.
           protocol: ftp
-          # Racine servie par le domaine valmecamobile.fr.
+          # Dossier servi par le domaine, tel que déclaré dans l'espace
+          # client OVH, onglet Multisite, colonne « Dossier racine ».
           #
-          # Ce n'est PAS ./www/ : l'inspection de l'arborescence a montré
-          # que le compte FTP contient deux dossiers, "www" et
-          # "valmecamobile". Le transfert vers ./www/ fonctionnait
-          # parfaitement — tous les fichiers y sont — mais le domaine ne
-          # sert pas ce dossier, d'où un site qui restait vide malgré un
-          # déploiement réussi.
-          # La valeur doit correspondre à la racine déclarée dans
-          # l'espace client OVH, onglet Multisite.
-          server-dir: ./valmecamobile/
+          # ./www/ est la convention OVH par défaut et sert de valeur de
+          # repli : un dépôt qui ne définit rien fonctionne tel quel.
+          # Pour un hébergement dont la racine porte un autre nom, définir
+          # la variable de dépôt FTP_SERVER_DIR (Settings > Secrets and
+          # variables > Actions > onglet Variables) — une variable, pas un
+          # secret : ce n'est pas une donnée sensible, et la voir dans les
+          # journaux aide au diagnostic.
+          server-dir: ${{ vars.FTP_SERVER_DIR || './www/' }}
           local-dir: ./
           # Ne pas envoyer ce qui n'a rien à faire sur le serveur
           exclude: |
