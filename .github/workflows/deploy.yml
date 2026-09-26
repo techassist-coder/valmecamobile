@@ -175,20 +175,25 @@ jobs:
           UTILISATEUR: ${{ secrets.FTP_USERNAME }}
           MDP: ${{ secrets.FTP_PASSWORD }}
         run: |
+          # Le contenu est publié en annotation, et pas seulement dans le
+          # journal : sur un dépôt public, le journal complet n'est
+          # consultable qu'en étant connecté, alors que les annotations
+          # sont lisibles par l'API.
           lister () {
             chemin="$1"
-            echo "--- contenu de $chemin ---"
             if curl -s --max-time 30 --list-only \
                  --user "$UTILISATEUR:$MDP" "ftp://$HOTE$chemin" > /tmp/liste.txt 2>/tmp/erreur.txt; then
               if [ -s /tmp/liste.txt ]; then
-                sed 's/^/    /' /tmp/liste.txt
+                contenu=$(tr '\n' ' ' < /tmp/liste.txt | sed 's/  */ /g')
+                echo "::warning::ARBORESCENCE $chemin >> $contenu"
               else
-                echo "    (dossier vide)"
+                echo "::warning::ARBORESCENCE $chemin >> (dossier vide)"
               fi
             else
-              echo "    (inaccessible) $(head -1 /tmp/erreur.txt)"
+              echo "::warning::ARBORESCENCE $chemin >> (inaccessible)"
             fi
-            echo ""
+            echo "--- contenu de $chemin ---"
+            cat /tmp/liste.txt 2>/dev/null | sed 's/^/    /'
           }
 
           lister "/"
