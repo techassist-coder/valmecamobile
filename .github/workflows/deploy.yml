@@ -164,6 +164,37 @@ jobs:
           echo "hote=$hote" >> "$GITHUB_OUTPUT"
           echo "Nom d'hôte FTP valide et résolu en DNS."
 
+      - name: Inspecter l'arborescence du serveur FTP
+        # Le transfert s'est terminé sans erreur mais le site restait vide :
+        # impossible de savoir, depuis l'extérieur, où les fichiers ont
+        # atterri ni quelle est la racine réelle du compte FTP. Cette étape
+        # affiche l'arborescence distante pour trancher.
+        # Seuls des noms de dossiers sont affichés, jamais les identifiants.
+        env:
+          HOTE: ${{ steps.ftp.outputs.hote }}
+          UTILISATEUR: ${{ secrets.FTP_USERNAME }}
+          MDP: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          lister () {
+            chemin="$1"
+            echo "--- contenu de $chemin ---"
+            if curl -s --max-time 30 --list-only \
+                 --user "$UTILISATEUR:$MDP" "ftp://$HOTE$chemin" > /tmp/liste.txt 2>/tmp/erreur.txt; then
+              if [ -s /tmp/liste.txt ]; then
+                sed 's/^/    /' /tmp/liste.txt
+              else
+                echo "    (dossier vide)"
+              fi
+            else
+              echo "    (inaccessible) $(head -1 /tmp/erreur.txt)"
+            fi
+            echo ""
+          }
+
+          lister "/"
+          lister "/www/"
+          lister "/home/"
+
       - name: Transférer par FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
